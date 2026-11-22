@@ -1,0 +1,9 @@
+# Free open-source AI & Computer Vision dependencies for YTClip (Python 3.10 - 3.12, Linux/macOS)
+faster-whisper>=1.1.0,<2.0.0
+ctranslate2>=4.5.0,<5.0.0
+av>=11.0.0
+numpy>=1.26.4
+opencv-python-headless>=4.10.0.84,<5.0.0
+huggingface-hub>=0.23.0
+tokenizers>=0.19.0
+onnxruntime>=1.18.0

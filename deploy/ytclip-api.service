@@ -1,0 +1,19 @@
+[Unit]
+Description=YTClip Backend API Server
+After=network.target
+
+[Service]
+Type=simple
+User=ytclip
+Group=ytclip
+WorkingDirectory=/opt/ytclip
+EnvironmentFile=/opt/ytclip/.env
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/ytclip/api.log
+StandardError=append:/var/log/ytclip/api-error.log
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

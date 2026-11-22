@@ -1,0 +1,19 @@
+[Unit]
+Description=YTClip Background Video Processing Worker (faster-whisper + OpenCV + FFmpeg)
+After=network.target ytclip-api.service
+
+[Service]
+Type=simple
+User=ytclip
+Group=ytclip
+WorkingDirectory=/opt/ytclip
+EnvironmentFile=/opt/ytclip/.env
+ExecStart=/usr/bin/npm run worker:prod
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/ytclip/worker.log
+StandardError=append:/var/log/ytclip/worker-error.log
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

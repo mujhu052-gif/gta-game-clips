@@ -1,0 +1,50 @@
+services:
+  ytclip-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        YTCLIP_WHISPER_MODEL: ${YTCLIP_WHISPER_MODEL:-base.en}
+    container_name: ytclip-api
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - ./deploy/.env.backend
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      EMBEDDED_WORKER: "false"
+      YTCLIP_DATA_DIR: /app/.ytclip_data
+      YTCLIP_MODEL_DIR: /app/.ytclip_models
+      YTCLIP_PYTHON_BIN: /app/.venv/bin/python3
+    volumes:
+      - ytclip_data:/app/.ytclip_data
+      - ytclip_models:/app/.ytclip_models
+    command: ["npm", "start"]
+
+  ytclip-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        YTCLIP_WHISPER_MODEL: ${YTCLIP_WHISPER_MODEL:-base.en}
+    container_name: ytclip-worker
+    restart: unless-stopped
+    depends_on:
+      - ytclip-api
+    env_file:
+      - ./deploy/.env.backend
+    environment:
+      NODE_ENV: production
+      YTCLIP_DATA_DIR: /app/.ytclip_data
+      YTCLIP_MODEL_DIR: /app/.ytclip_models
+      YTCLIP_PYTHON_BIN: /app/.venv/bin/python3
+    volumes:
+      - ytclip_data:/app/.ytclip_data
+      - ytclip_models:/app/.ytclip_models
+    command: ["npm", "run", "worker:prod"]
+
+volumes:
+  ytclip_data:
+  ytclip_models:
